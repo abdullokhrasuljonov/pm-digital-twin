@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import PMSelector from "../components/PMSelector.vue";
 </script>
 
 <template>
   <div class="legend">
-    <h3>PM Legend</h3>
+    <main class="">
+      <PMSelector />
+    </main>
     <ul>
       <li><span class="box pm1"></span> PM1.0</li>
       <li><span class="box pm25"></span> PM2.5</li>
@@ -33,7 +36,7 @@
   width: 14px;
   height: 14px;
   margin-right: 8px;
-  border-radius: 3px;
+  border-radius: 0px;
 }
 
 .pm1 { background: #22c55e; }   /* green */
