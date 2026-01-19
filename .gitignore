@@ -35,3 +35,5 @@ Thumbs.db
 *.ply
 *.pcd
 *.obj
+
+frontend/public/models/
