@@ -1,0 +1,22 @@
+# Node / Vue
+node_modules/
+dist/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ML artifacts
+data/raw/
+*.csv
+*.tiff
+*.geotiff
+
+# Secrets
+.env
+.env.local
+
+# OS
+.DS_Store
