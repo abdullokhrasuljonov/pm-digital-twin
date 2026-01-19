@@ -8,11 +8,18 @@ __pycache__/
 .venv/
 venv/
 
-# ML artifacts
+# ML artifacts & data
 data/raw/
 *.csv
 *.tiff
 *.geotiff
+
+# Optional: trained models
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
 
 # Secrets
 .env
@@ -20,3 +27,4 @@ data/raw/
 
 # OS
 .DS_Store
+Thumbs.db
