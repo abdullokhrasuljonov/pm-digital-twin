@@ -28,3 +28,10 @@ data/raw/
 # OS
 .DS_Store
 Thumbs.db
+
+# 3D models (digital twin assets)
+*.glb
+*.gltf
+*.ply
+*.pcd
+*.obj
