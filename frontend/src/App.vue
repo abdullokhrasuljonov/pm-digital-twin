@@ -7,7 +7,7 @@ import Legend from "./components/Legend.vue";
   <div class="app-root">
     <!-- Top control panel -->
     <header class="top-panel">
-      <h2>PM Monitoring Digital Twin Platform</h2>
+      <h2 class>PM Monitoring Digital Twin Platform</h2>
     </header>
 
     <!-- 3D Digital Twin -->
@@ -41,14 +41,8 @@ import Legend from "./components/Legend.vue";
   align-items: center;
   justify-content: space-between;
   padding: 8px 20px;
+  color: azure;
   background: #020617;
-}
-
-.top-panel h1 {
-  margin: 0;
-  color: #f8fafc;
-  font-size: 18px;
-  font-weight: 600;
 }
 
 .viewer {
@@ -67,8 +61,8 @@ import Legend from "./components/Legend.vue";
   grid-row: 2;
   grid-column: 2;
   padding: 12px;
+  color: azure;
   background: #020617;
-  border-left: 1px solid #1e293b;
 }
 
 </style>
