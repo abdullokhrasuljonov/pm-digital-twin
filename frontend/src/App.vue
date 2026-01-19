@@ -8,7 +8,7 @@ import Legend from "./components/Legend.vue";
   <div class="app-root">
     <!-- Top control panel -->
     <header class="top-panel">
-      <h1>Construction Site PM Digital Twin</h1>
+      <h1>PM Monitoring Digital Twin Platform</h1>
       <PMSelector />
     </header>
 
