@@ -1,30 +1,43 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import BabylonCanvas from "./components/BabylonCanvas.vue";
+import PMSelector from "./components/PMSelector.vue";
+import Legend from "./components/Legend.vue";
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="app-root">
+    <!-- Top control panel -->
+    <header class="top-panel">
+      <h1>Construction Site PM Digital Twin</h1>
+      <PMSelector />
+    </header>
+
+    <!-- 3D Digital Twin -->
+    <main class="viewer">
+      <BabylonCanvas />
+    </main>
+
+    <!-- PM legend -->
+    <aside class="legend-panel">
+      <Legend />
+    </aside>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.app-root {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr auto;
+  height: 100vh;
+  background: #0f172a; /* dark, professional */
+  color: #e5e7eb;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+
+.top-panel {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  backgrou
