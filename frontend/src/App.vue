@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BabylonCanvas from "./components/BabylonCanvas.vue";
 import Legend from "./components/Legend.vue";
+import ControlPanel from "./components/ControlPanel.vue";
 </script>
 
 <template>
@@ -18,11 +19,13 @@ import Legend from "./components/Legend.vue";
     <!-- PM legend -->
     <aside class="legend-panel">
       <Legend />
+      <ControlPanel />
     </aside>
   </div>
 </template>
 
 <style scoped>
+
 .app-root {
   display: grid;
   grid-template-rows: auto 1fr;
@@ -34,13 +37,12 @@ import Legend from "./components/Legend.vue";
   background: #020617;
 }
 
-
 .top-panel {
   grid-column: 1 / -1;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2px 20px;
+  padding: 0px 24px;
   color: azure;
   background: #020617;
 }
@@ -55,7 +57,6 @@ import Legend from "./components/Legend.vue";
   background: #020617;
   overflow: hidden;
 }
-
 
 .legend-panel {
   grid-row: 2;

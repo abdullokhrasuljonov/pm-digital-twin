@@ -9,6 +9,36 @@ import {
   SceneLoader,
 } from "@babylonjs/core";
 import "@babylonjs/loaders";
+import { watch } from "vue";
+import { useEnvStore } from "../store/envStore";
+
+const env = useEnvStore();
+
+
+watch(
+  () => [
+    env.timeRange.start,
+    env.timeRange.end,
+    env.humidity,
+    env.windSpeed,
+    env.windDirection,
+  ],
+  () => {
+    console.log("Simulation updated:", {
+      time: env.timeRange,
+      humidity: env.humidity,
+      windSpeed: env.windSpeed,
+      windDirection: env.windDirection,
+    });
+
+    // 🔜 later:
+    // - re-fetch PM data
+    // - update heatmap
+    // - adjust particle flow direction
+  }
+);
+
+
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 
