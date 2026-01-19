@@ -40,4 +40,22 @@ import Legend from "./components/Legend.vue";
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  backgrou
+  background: #020617;
+  border-bottom: 1px solid #1e293b;
+}
+
+.viewer {
+  grid-row: 2;
+  grid-column: 1;
+  position: relative;
+}
+
+.legend-panel {
+  grid-row: 2;
+  grid-column: 2;
+  width: 220px;
+  padding: 12px;
+  background: #020617;
+  border-left: 1px solid #1e293b;
+}
+</style>
