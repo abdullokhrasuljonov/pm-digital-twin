@@ -26,7 +26,7 @@ import Legend from "./components/Legend.vue";
 .app-root {
   display: grid;
   grid-template-rows: auto 1fr;
-  grid-template-columns: 1fr 240px;
+  grid-template-columns: 1fr 360px;
   width: 100%;
   height: 100%;
   margin: 0;
@@ -40,7 +40,7 @@ import Legend from "./components/Legend.vue";
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 20px;
+  padding: 2px 20px;
   color: azure;
   background: #020617;
 }
@@ -60,7 +60,7 @@ import Legend from "./components/Legend.vue";
 .legend-panel {
   grid-row: 2;
   grid-column: 2;
-  padding: 12px;
+  padding: 24px;
   color: azure;
   background: #020617;
 }
