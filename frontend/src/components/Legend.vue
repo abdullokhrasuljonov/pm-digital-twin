@@ -2,6 +2,7 @@
 import PMSelector from "../components/PMSelector.vue";
 </script>
 
+
 <template>
   <div class="legend">
     <main class="">
@@ -9,6 +10,7 @@ import PMSelector from "../components/PMSelector.vue";
     </main>
   </div>
 </template>
+
 
 <style scoped>
 .legend {
@@ -26,6 +28,4 @@ import PMSelector from "../components/PMSelector.vue";
   align-items: center;
   margin-bottom: 6px;
 }
-
-
 </style>
