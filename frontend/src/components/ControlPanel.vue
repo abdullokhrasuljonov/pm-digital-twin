@@ -41,14 +41,14 @@ async function runSimulation() {
     </h3>
 
     <!-- PM TYPE -->
-    <div class="flex items-center gap-3">
-      <label class="font-medium whitespace-nowrap">
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium whitespace-nowrap">
         PM Type
       </label>
       <select
         v-model="selectedPM"
-        class="rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-slate-200
-               focus:outline-none focus:ring-2 focus:ring-sky-500"
+        class="rounded-lg border border-slate-700 bg-slate-950 px-2 py-2 text-slate-200
+               focus:outline-none focus:ring-2"
       >
         <option value="pm1">PM1.0</option>
         <option value="pm2_5">PM2.5</option>
@@ -65,7 +65,7 @@ async function runSimulation() {
         <input
           type="datetime-local"
           v-model="env.timeRange.start"
-          class="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-slate-200
+          class="w-full rounded-lg border border-slate-700 bg-slate-950 px-2 py-2 text-slate-200
                  focus:outline-none focus:ring-2 focus:ring-sky-500"
         />
       </div>
@@ -77,7 +77,7 @@ async function runSimulation() {
         <input
           type="datetime-local"
           v-model="env.timeRange.end"
-          class="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-slate-200
+          class="w-full rounded-lg border border-slate-700 bg-slate-950 px-2 py-2 text-slate-200
                  focus:outline-none focus:ring-2 focus:ring-sky-500"
         />
       </div>
@@ -115,7 +115,7 @@ async function runSimulation() {
         max="20"
         step="0.5"
         v-model.number="env.windSpeed"
-        class="w-full accent-emerald-500"
+        class="w-full accent-sky-500"
       />
     </div>
 
@@ -133,14 +133,14 @@ async function runSimulation() {
         max="360"
         step="5"
         v-model.number="env.windDirection"
-        class="w-full accent-amber-500"
+        class="w-full accent-sky-500"
       />
     </div>
 
     <!-- RUN BUTTON -->
     <button
       @click="runSimulation"
-      class="w-full rounded-md bg-sky-600 px-4 py-2 font-medium text-white
+      class="w-full rounded-lg bg-sky-600 px-4 py-2 font-medium text-white
              hover:bg-sky-500 transition"
     >
       Run Simulation
