@@ -37,7 +37,7 @@ query_api = client.query_api()
 # ==============================
 @app.get("/pm")
 def get_pm_data(
-    pm_type: str = Query("pm2_5"),
+    pm_type: str = Query("pm10"),
     start: str = Query(...),
     stop: str = Query(...)
 ):
