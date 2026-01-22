@@ -1,78 +1,149 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { useEnvStore } from "../store/envStore";
+import { usePMStore } from "../store/pmStore";
+import { fetchPmData } from "../services/pmApi";
 
+/* =========================
+   Stores
+========================= */
 const env = useEnvStore();
+const pmStore = usePMStore();
+
+/* =========================
+   PM selector (computed)
+========================= */
+type PMType = "pm1" | "pm2_5" | "pm10";
+
+const selectedPM = computed<PMType>({
+  get: () => pmStore.pmType,
+  set: (val) => pmStore.setPMType(val),
+});
+
+/* =========================
+   Actions
+========================= */
+async function runSimulation() {
+  try {
+    const res = await fetchPmData();
+    console.log("Backend response:", res.data);
+  } catch (err) {
+    console.error("Simulation failed:", err);
+  }
+}
 </script>
 
 <template>
-  <div class="control-panel">
-    <h3>Simulation Controls</h3>
+  <aside class="space-y-6 text-sm text-slate-200">
+    <!-- Title -->
+    <h3 class="text-base font-semibold text-white">
+      Simulation Controls
+    </h3>
 
-    <!-- Time range -->
-    <div class="group">
-      <label>Start Time</label>
-      <input type="datetime-local" v-model="env.timeRange.start" />
+    <!-- PM TYPE -->
+    <div class="flex items-center gap-3">
+      <label class="font-medium whitespace-nowrap">
+        PM Type
+      </label>
+      <select
+        v-model="selectedPM"
+        class="rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-slate-200
+               focus:outline-none focus:ring-2 focus:ring-sky-500"
+      >
+        <option value="pm1">PM1.0</option>
+        <option value="pm2_5">PM2.5</option>
+        <option value="pm10">PM10</option>
+      </select>
     </div>
 
-    <div class="group">
-      <label>End Time</label>
-      <input type="datetime-local" v-model="env.timeRange.end" />
+    <!-- TIME RANGE -->
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-slate-300">
+          Start Time
+        </label>
+        <input
+          type="datetime-local"
+          v-model="env.timeRange.start"
+          class="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-slate-200
+                 focus:outline-none focus:ring-2 focus:ring-sky-500"
+        />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-slate-300">
+          End Time
+        </label>
+        <input
+          type="datetime-local"
+          v-model="env.timeRange.end"
+          class="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-slate-200
+                 focus:outline-none focus:ring-2 focus:ring-sky-500"
+        />
+      </div>
     </div>
 
-    <!-- Humidity -->
-    <div class="group">
-      <label>Humidity (%)</label>
+    <!-- HUMIDITY -->
+    <div class="flex flex-col gap-1">
+      <label class="font-medium">
+        Humidity
+        <span class="text-slate-400">
+          ({{ env.humidity }}%)
+        </span>
+      </label>
       <input
         type="range"
         min="0"
         max="100"
         step="1"
         v-model.number="env.humidity"
+        class="w-full accent-sky-500"
       />
-      <span>{{ env.humidity }}%</span>
     </div>
 
-    <!-- Wind speed -->
-    <div class="group">
-      <label>Wind Speed (m/s)</label>
+    <!-- WIND SPEED -->
+    <div class="flex flex-col gap-1">
+      <label class="font-medium">
+        Wind Speed
+        <span class="text-slate-400">
+          ({{ env.windSpeed }} m/s)
+        </span>
+      </label>
       <input
         type="range"
         min="0"
         max="20"
         step="0.5"
         v-model.number="env.windSpeed"
+        class="w-full accent-emerald-500"
       />
-      <span>{{ env.windSpeed }} m/s</span>
     </div>
 
-    <!-- Wind direction -->
-    <div class="group">
-      <label>Wind Direction (°)</label>
+    <!-- WIND DIRECTION -->
+    <div class="flex flex-col gap-1">
+      <label class="font-medium">
+        Wind Direction
+        <span class="text-slate-400">
+          ({{ env.windDirection }}°)
+        </span>
+      </label>
       <input
         type="range"
         min="0"
         max="360"
         step="5"
         v-model.number="env.windDirection"
+        class="w-full accent-amber-500"
       />
-      <span>{{ env.windDirection }}°</span>
     </div>
-  </div>
+
+    <!-- RUN BUTTON -->
+    <button
+      @click="runSimulation"
+      class="w-full rounded-md bg-sky-600 px-4 py-2 font-medium text-white
+             hover:bg-sky-500 transition"
+    >
+      Run Simulation
+    </button>
+  </aside>
 </template>
-
-<style scoped>
-.control-panel {
-  background: #020617;
-  color: white;
-}
-
-.group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 12px;
-}
-
-input[type="range"] {
-  width: 100%;
-}
-</style>

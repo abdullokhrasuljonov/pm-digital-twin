@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import BabylonCanvas from "./components/BabylonCanvas.vue";
-import Legend from "./components/Legend.vue";
 import ControlPanel from "./components/ControlPanel.vue";
 </script>
 
@@ -26,7 +25,6 @@ import ControlPanel from "./components/ControlPanel.vue";
 
     <!-- PM legend + controls -->
     <aside class="bg-slate-950 p-6 space-y-6">
-      <Legend />
       <ControlPanel />
     </aside>
   </div>
