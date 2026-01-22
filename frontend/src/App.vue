@@ -5,65 +5,29 @@ import ControlPanel from "./components/ControlPanel.vue";
 </script>
 
 <template>
-  <div class="app-root">
+  <div
+    class="grid grid-rows-[auto_1fr] grid-cols-[1fr_360px]
+           w-screen h-screen bg-slate-950 text-slate-100"
+  >
     <!-- Top control panel -->
-    <header class="top-panel">
-      <h2 class>PM Monitoring Digital Twin Platform</h2>
+    <header
+      class="col-span-2 flex items-center justify-between
+             px-6 h-14 bg-slate-950"
+    >
+      <h2 class="text-lg font-semibold">
+        PM Monitoring Digital Twin Platform
+      </h2>
     </header>
 
     <!-- 3D Digital Twin -->
-    <main class="viewer">
+    <main class="overflow-hidden bg-slate-950">
       <BabylonCanvas />
     </main>
 
-    <!-- PM legend -->
-    <aside class="legend-panel">
+    <!-- PM legend + controls -->
+    <aside class="bg-slate-950 p-6 space-y-6">
       <Legend />
       <ControlPanel />
     </aside>
   </div>
 </template>
-
-<style scoped>
-
-.app-root {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  grid-template-columns: 1fr 360px;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background: #020617;
-}
-
-.top-panel {
-  grid-column: 1 / -1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0px 24px;
-  color: azure;
-  background: #020617;
-}
-
-.viewer {
-  grid-row: 2;
-  grid-column: 1;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background: #020617;
-  overflow: hidden;
-}
-
-.legend-panel {
-  grid-row: 2;
-  grid-column: 2;
-  padding: 24px;
-  color: azure;
-  background: #020617;
-}
-
-</style>

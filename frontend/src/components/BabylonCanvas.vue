@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref } from "vue";
+import { onMounted, onBeforeUnmount, ref, watch } from "vue";
 import {
   Engine,
   Scene,
@@ -9,12 +9,24 @@ import {
   SceneLoader,
 } from "@babylonjs/core";
 import "@babylonjs/loaders";
-import { watch } from "vue";
 import { useEnvStore } from "../store/envStore";
 
+/* =========================
+   Store
+========================= */
 const env = useEnvStore();
 
+/* =========================
+   Canvas & Babylon refs
+========================= */
+const canvasRef = ref<HTMLCanvasElement | null>(null);
 
+let engine: Engine | null = null;
+let scene: Scene | null = null;
+
+/* =========================
+   React to environment changes
+========================= */
 watch(
   () => [
     env.timeRange.start,
@@ -30,21 +42,19 @@ watch(
       windSpeed: env.windSpeed,
       windDirection: env.windDirection,
     });
-
-    // 🔜 later:
-    // - re-fetch PM data
-    // - update heatmap
-    // - adjust particle flow direction
   }
 );
 
+/* =========================
+   Resize
+========================= */
+function handleResize() {
+  engine?.resize();
+}
 
-
-const canvasRef = ref<HTMLCanvasElement | null>(null);
-
-let engine: Engine | null = null;
-let scene: Scene | null = null;
-
+/* =========================
+   Babylon lifecycle
+========================= */
 onMounted(async () => {
   if (!canvasRef.value) return;
 
@@ -59,11 +69,12 @@ onMounted(async () => {
     Vector3.Zero(),
     scene
   );
+
   camera.attachControl(canvasRef.value, true);
 
   new HemisphericLight("light", new Vector3(0, 1, 0), scene);
 
-  // Load 3D site model
+  // Load site model
   await SceneLoader.AppendAsync("/models/", "site.glb", scene);
 
   camera.zoomOn(scene.meshes);
@@ -79,22 +90,19 @@ onBeforeUnmount(() => {
   window.removeEventListener("resize", handleResize);
   engine?.dispose();
 });
-
-function handleResize() {
-  engine?.resize();
-}
 </script>
 
 <template>
-  <canvas ref="canvasRef" class="babylon-canvas"></canvas>
+  <canvas
+    ref="canvasRef"
+    class="
+      w-full
+      h-full
+      block
+      outline-none
+      border-0
+      bg-slate-950
+      select-none
+    "
+  />
 </template>
-
-<style scoped>
-.babylon-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-  outline: none;
-  border: none;
-}
-</style>

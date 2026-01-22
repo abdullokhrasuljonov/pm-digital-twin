@@ -37,9 +37,9 @@ query_api = client.query_api()
 # ==============================
 @app.get("/pm")
 def get_pm_data(
-    pm_type: str = Query("pm10"),
-    start: str = Query(...),
-    stop: str = Query(...)
+    pm_type: str = Query("pm1"),
+    start: str = Query("2026-10-01T14:00:00Z"),
+    stop: str = Query("2026-10-01T16:00:00Z")
 ):
     query = f'''
 from(bucket: "{INFLUX_BUCKET}")
