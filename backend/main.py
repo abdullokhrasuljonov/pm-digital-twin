@@ -1,99 +1,37 @@
-# from fastapi import FastAPI, Query
-# from influxdb_client import InfluxDBClient
-# from dotenv import load_dotenv
-# import os
-
-# # ==============================
-# # Load environment variables
-# # ==============================
-# load_dotenv()
-
-# INFLUX_URL = os.getenv("INFLUX_URL")
-# INFLUX_TOKEN = os.getenv("INFLUX_TOKEN")
-# INFLUX_ORG = os.getenv("INFLUX_ORG")
-# INFLUX_BUCKET = os.getenv("INFLUX_BUCKET")
-
-# HOST = os.getenv("BACKEND_HOST", "127.0.0.1")
-# PORT = int(os.getenv("BACKEND_PORT", 3001))
-
-# # ==============================
-# # FastAPI App
-# # ==============================
-# app = FastAPI(title="PM Digital Twin Backend")
-
-# # ==============================
-# # InfluxDB Client
-# # ==============================
-# client = InfluxDBClient(
-#     url=INFLUX_URL,
-#     token=INFLUX_TOKEN,
-#     org=INFLUX_ORG
-# )
-
-# query_api = client.query_api()
-
-# # ==============================
-# # API Endpoint
-# # ==============================
-# @app.get("/pm")
-# def get_pm_data(
-#     pm_type: str = Query("pm1"),
-#     start: str = Query("2026-10-01T14:00:00Z"),
-#     stop: str = Query("2026-10-01T16:00:00Z")
-# ):
-#     query = f'''
-# from(bucket: "{INFLUX_BUCKET}")
-#   |> range(start: time(v: "{start}"), stop: time(v: "{stop}"))
-#   |> filter(fn: (r) =>
-#       r._field == "{pm_type}" or
-#       r._field == "latitude" or
-#       r._field == "longitude" or
-#       r._field == "altitude"
-#   )
-#   |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
-# '''
-
-#     tables = query_api.query(query)
-#     data = []
-
-#     for table in tables:
-#         for record in table.records:
-#             data.append(record.values)
-
-#     return data
-
-
-# @app.get("/")
-# def health():
-#     return {"status": "PM Digital Twin Backend is running"}
-
-from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
-load_dotenv()
 from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Literal
 from datetime import datetime
-
-from influx_client import query_api
+from dotenv import load_dotenv
 import os
 
-app = FastAPI()
+from influx_client import query_api
+from geo_utils import latlon_to_xyz
+
+# --------------------------------------------------
+# Environment
+# --------------------------------------------------
+load_dotenv()
+
+INFLUX_BUCKET = os.getenv("INFLUX_BUCKET")
+INFLUX_ORG = os.getenv("INFLUX_ORG")
+
+# --------------------------------------------------
+# FastAPI app
+# --------------------------------------------------
+app = FastAPI(title="PM Monitoring Digital Twin API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",  # Vite frontend
-    ],
+    allow_origins=["http://localhost:5173"],  # Vite frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-BUCKET = os.getenv("INFLUX_BUCKET")
-ORG = os.getenv("INFLUX_ORG")
-
-
+# --------------------------------------------------
+# API Endpoint
+# --------------------------------------------------
 @app.get("/api/pm-data")
 def get_pm_data(
     pm_type: Literal["pm1", "pm2_5", "pm10"] = Query(...),
@@ -103,11 +41,15 @@ def get_pm_data(
     wind_speed: float | None = Query(None, ge=0),
 ):
     """
-    Receives parameters from frontend and queries InfluxDB
+    Retrieve spatial PM data from InfluxDB and convert it
+    into local Cartesian coordinates for digital-twin rendering.
     """
 
+    # --------------------------------------------------
+    # Flux query (pivoted for spatial alignment)
+    # --------------------------------------------------
     flux_query = f"""
-    from(bucket: "{BUCKET}")
+    from(bucket: "{INFLUX_BUCKET}")
       |> range(
           start: time(v: "{start_time.isoformat()}Z"),
           stop: time(v: "{end_time.isoformat()}Z")
@@ -129,14 +71,13 @@ def get_pm_data(
       |> keep(columns: ["_time", "{pm_type}", "latitude", "longitude", "altitude"])
     """
 
+    tables = query_api.query(flux_query, org=INFLUX_ORG)
 
-    tables = query_api.query(flux_query, org=ORG)
-
-    results = []
+    raw_points = []
 
     for table in tables:
         for record in table.records:
-            results.append({
+            raw_points.append({
                 "time": record.get_time(),
                 "value": record.values.get(pm_type),
                 "latitude": record.values.get("latitude"),
@@ -144,13 +85,44 @@ def get_pm_data(
                 "altitude": record.values.get("altitude"),
             })
 
+    # --------------------------------------------------
+    # Convert lat/lon → local XYZ
+    # --------------------------------------------------
+    xyz_points = []
+
+    if raw_points:
+        # Reference origin (first valid point)
+        lat0 = raw_points[0]["latitude"]
+        lon0 = raw_points[0]["longitude"]
+        alt0 = raw_points[0]["altitude"]
+
+        for p in raw_points:
+            x, y, z = latlon_to_xyz(
+                p["latitude"],
+                p["longitude"],
+                p["altitude"],
+                lat0,
+                lon0,
+                alt0,
+            )
+
+            xyz_points.append({
+                "time": p["time"],
+                "x": x,
+                "y": y,
+                "z": z,
+                "value": p["value"],
+            })
+
+    # --------------------------------------------------
+    # Response
+    # --------------------------------------------------
     return {
         "pm_type": pm_type,
         "start_time": start_time,
         "end_time": end_time,
         "humidity": humidity,
         "wind_speed": wind_speed,
-        "count": len(results),
-        "data": results,
+        "count": len(xyz_points),
+        "data": xyz_points,
     }
-
