@@ -78,7 +78,6 @@ from influx_client import query_api
 import os
 
 app = FastAPI()
-app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
