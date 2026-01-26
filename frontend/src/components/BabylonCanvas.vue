@@ -35,10 +35,9 @@ let pmMeshes: Mesh[] = [];
    PM color mapping
 ===================================================== */
 function pmColor(value: number): Color3 {
-  if (value < 50) return Color3.Green();
-  if (value < 100) return Color3.Yellow();
-  if (value < 150) return Color3.Red();
-  return Color3.Red();
+  if (value <= 30) return Color3.Green();
+  if (value <= 80) return Color3.Yellow();
+  else return Color3.Red();
 }
 
 /* =====================================================
@@ -59,7 +58,8 @@ function renderPmDots(
       scene
     );
 
-    sphere.position.set(p.x, p.y + 0.5, p.z);
+    // sphere.position.set(p.x, p.y + 0.5, p.z);
+    sphere.position.set(p.x, p.y, p.z);
 
     const mat = new StandardMaterial("pm-mat", scene);
     mat.diffuseColor = pmColor(p.value);
@@ -125,14 +125,21 @@ onMounted(async () => {
     Math.PI / 2,
     Math.PI / 3,
     60,
-    Vector3.Zero(),
+    new Vector3(0, 50, 0),
     scene
   );
+  
   camera.attachControl(canvasRef.value, true);
   camera.wheelDeltaPercentage = 0.01;
 
   // Light
-  new HemisphericLight("light", new Vector3(0, 1, 0), scene);
+  const light = new HemisphericLight(
+    "light",
+    new Vector3(0, 1, 0),
+    scene
+  );
+  light.intensity = 0.8
+  
 
   // Load site model
   await SceneLoader.AppendAsync("/models/", "site.glb", scene);

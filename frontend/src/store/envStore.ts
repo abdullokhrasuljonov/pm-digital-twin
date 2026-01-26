@@ -1,15 +1,11 @@
 import { defineStore } from "pinia";
 
-function toLocalISOString(date: Date) {
-  return date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
-}
 
 export const useEnvStore = defineStore("env", {
   state: () => ({
     timeRange: {
-      // default: last 2 hours → now
-      start: toLocalISOString(new Date(Date.now() - 2 * 60 * 60 * 1000)),
-      end: toLocalISOString(new Date()),
+      start: "2026-10-01T14:00",
+      end: "2026-10-01T16:00",
     },
 
     humidity: 50,        // %
@@ -18,9 +14,9 @@ export const useEnvStore = defineStore("env", {
   }),
 
   actions: {
-    setTimeRange(start: string, end: string) {
-      this.timeRange.start = start;
-      this.timeRange.end = end;
+    setTimeRange() {
+      this.timeRange.start = '2026-10-01T14:00:00Z';
+      this.timeRange.end = '2026-10-01T16:00:00Z';
     },
 
     setHumidity(value: number) {
