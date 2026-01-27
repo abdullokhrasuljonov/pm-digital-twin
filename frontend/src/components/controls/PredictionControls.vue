@@ -1,80 +1,72 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { ref } from "vue";
+import { predictPM } from "../../services/pmPredictionApi";
+import type { PredictionResponse } from "../../services/pmPredictionApi";
 
-const form = reactive({
-  pm_type: "pm2_5",
+const loading = ref(false);
+const error = ref<string | null>(null);
+const result = ref<PredictionResponse | null>(null);
 
-  temperature: 20,
-  humidity: 60,
-  pressure: 1013,
+async function runPrediction() {
+  loading.value = true;
+  error.value = null;
 
-  wind_north: 1.5,
-  wind_east: 0.8,
-
-  latitude: 35.1,
-  longitude: 129.0,
-  altitude: 15,
-
-  activities: [
-    { latitude: 35.101, longitude: 129.001, altitude: 10 }
-  ],
-});
-
-function submitPrediction() {
-  console.log("Prediction payload", form);
-
-  // 🔜 POST → /pm/predict
+  try {
+    result.value = await predictPM({
+      pm_type: "pm2_5",
+      temperature: 20,
+      humidity: 60,
+      pressure: 1013,
+      wind_north: 1.2,
+      wind_east: 0.8,
+      latitude: 35.1,
+      longitude: 129.0,
+      altitude: 15,
+      activities: [
+        {
+          latitude: 35.101,
+          longitude: 129.001,
+          altitude: 10,
+        },
+      ],
+    });
+  } catch (e: any) {
+    error.value = e.message ?? "Prediction failed";
+  } finally {
+    loading.value = false;
+  }
 }
 </script>
 
 <template>
-  <div class="space-y-4">
-    <!-- PM Type -->
-    <div>
-      <label class="block text-md mb-1">PM Type</label>
-      <select v-model="form.pm_type"
-        class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm">
-        <option value="pm1">PM1.0</option>
-        <option value="pm2_5">PM2.5</option>
-        <option value="pm10">PM10</option>
-      </select>
-    </div>
+  <div class="space-y-4 p-4 bg-slate-900 rounded-xl text-white">
+    <h2 class="text-xl font-semibold">PM Prediction</h2>
 
-    <!-- Weather -->
-    <div class="grid grid-cols-2 gap-3">
-      <input v-model.number="form.temperature" placeholder="Temp (°C)" class="input" />
-      <input v-model.number="form.humidity" placeholder="Humidity (%)" class="input" />
-      <input v-model.number="form.pressure" placeholder="Pressure (hPa)" class="input" />
-    </div>
-
-    <!-- Wind -->
-    <div class="grid grid-cols-2 gap-3">
-      <input v-model.number="form.wind_north" placeholder="Wind North (m/s)" class="input" />
-      <input v-model.number="form.wind_east" placeholder="Wind East (m/s)" class="input" />
-    </div>
-
-    <!-- Location -->
-    <div class="grid grid-cols-3 gap-3">
-      <input v-model.number="form.latitude" placeholder="Lat" class="input" />
-      <input v-model.number="form.longitude" placeholder="Lon" class="input" />
-      <input v-model.number="form.altitude" placeholder="Alt (m)" class="input" />
-    </div>
-
+    <!-- Run button -->
     <button
-      @click="submitPrediction"
-      class="w-full bg-purple-600 hover:bg-purple-500 text-white text-sm py-2 rounded">
-      Run Prediction
+      @click="runPrediction"
+      class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg"
+      :disabled="loading"
+    >
+      {{ loading ? "Predicting..." : "Run Prediction" }}
     </button>
+
+    <!-- Error -->
+    <p v-if="error" class="text-red-400">{{ error }}</p>
+
+    <!-- Result -->
+    <div
+      v-if="result"
+      class="mt-4 p-4 rounded-lg bg-slate-800 border border-slate-700"
+    >
+      <p class="text-sm text-slate-400">
+        PM Type: <span class="text-white">{{ result.pm_type }}</span>
+      </p>
+
+      <p class="text-3xl font-bold mt-2">
+        {{ result.pm_value.toFixed(1) }}
+        <span class="text-lg font-normal">{{ result.unit }}</span>
+      </p>
+    </div>
   </div>
 </template>
-
-<style scoped>
-.input {
-  background: #020617;
-  border: 1px solid #334155;
-  border-radius: 6px;
-  padding: 4px 6px;
-  font-size: 14px;
-  color: white;
-}
-</style>
