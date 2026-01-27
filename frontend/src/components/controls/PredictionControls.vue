@@ -31,9 +31,9 @@ function submitPrediction() {
   <div class="space-y-4">
     <!-- PM Type -->
     <div>
-      <label class="block text-xs mb-1">PM Type</label>
+      <label class="block text-md mb-1">PM Type</label>
       <select v-model="form.pm_type"
-        class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1">
+        class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm">
         <option value="pm1">PM1.0</option>
         <option value="pm2_5">PM2.5</option>
         <option value="pm10">PM10</option>
@@ -72,9 +72,9 @@ function submitPrediction() {
 .input {
   background: #020617;
   border: 1px solid #334155;
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 4px 6px;
-  font-size: 12px;
+  font-size: 14px;
   color: white;
 }
 </style>
