@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
-from backend.routers.pm_data import router as pm_data_router
-from backend.routers.pm_predict import router as pm_predict_router
+from routers.pm_data import router as pm_data_router
+from routers.pm_predict import router as pm_predict_router
 
 load_dotenv()
 

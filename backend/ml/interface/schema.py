@@ -1,8 +1,13 @@
 from pydantic import BaseModel
-from typing import List, Dict
+from typing import List
+
+class Activity(BaseModel):
+    latitude: float
+    longitude: float
+    altitude: float
 
 class PMPredictionInput(BaseModel):
-    pm_type: str  # pm1 | pm2_5 | pm10
+    pm_type: str  # pm1 | pm25 | pm10
 
     temperature: float
     humidity: float
@@ -15,4 +20,4 @@ class PMPredictionInput(BaseModel):
     longitude: float
     altitude: float
 
-    activities: List[Dict]  # [{latitude, longitude, altitude}]
+    activities: List[Activity]

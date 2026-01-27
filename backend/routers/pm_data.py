@@ -3,8 +3,8 @@ from typing import Literal
 from datetime import datetime
 import os
 
-from backend.influx_client import query_api
-from backend.geo_utils import latlon_to_xyz
+from influx_client import query_api
+from geo_utils import latlon_to_xyz
 
 router = APIRouter(prefix="/api", tags=["PM Data"])
 
