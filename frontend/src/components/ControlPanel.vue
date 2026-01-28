@@ -11,17 +11,17 @@ const activeTab = ref<"history" | "prediction">("history");
     <!-- Tabs -->
     <div class="flex border-b border-slate-700 mb-4">
       <button
-        class="px-4 py-2 text-sm font-medium"
+        class="flex-1 px-4 py-2 text-md font-medium text-center"
         :class="activeTab === 'history'
-          ? 'border-b-2 border-cyan-400 text-cyan-400'
+          ? 'border-b-2 border-purple-400 text-purple-400'
           : 'text-slate-400 hover:text-slate-200'"
         @click="activeTab = 'history'"
       >
-        Historical
+        Historical Data
       </button>
 
       <button
-        class="px-4 py-2 text-sm font-medium ml-4"
+        class="flex-1 px-4 py-2 text-md font-medium text-center"
         :class="activeTab === 'prediction'
           ? 'border-b-2 border-purple-400 text-purple-400'
           : 'text-slate-400 hover:text-slate-200'"

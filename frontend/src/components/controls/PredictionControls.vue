@@ -59,67 +59,137 @@ async function runPrediction() {
 
 
 <template>
-  <div class="space-y-4 p-4 bg-slate-900 rounded-xl text-black">
+    <div class="space-y-4">
+        <div class="space-y-6 p-4 bg-slate-900 rounded-xl text-slate-200 text-sm">
+          <!-- ========================= -->
+          <!-- PM Characteristics -->
+          <!-- ========================= -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-2 text-slate-300 font-medium">
+              <span class="w-1 h-4 bg-purple-500 rounded-full"></span>
+              PM Characteristics
+            </div>
+        
+            <!-- PM Type -->
+            <div class="grid grid-cols-[1fr_auto] items-center gap-x-4">
+              <label>PM type</label>
+              <select v-model="pm_type" class="input w-[80px] text-slate-800 px-2 py-1 rounded-lg">
+                <option value="pm2_5">PM2.5</option>
+                <option value="pm10">PM10</option>
+                <option value="pm1">PM1</option>
+              </select>
+            </div>
+          </div>    
+        </div>
+    
+        <div class="space-y-6 p-4 bg-slate-900 rounded-xl text-slate-200 text-sm">
+          <!-- ========================= -->
+          <!-- Environmental Factors -->
+          <!-- ========================= -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-2 text-slate-300 font-medium">
+              <span class="w-1 h-4 bg-purple-500 rounded-full"></span>
+              Environmental Factors
+            </div>
+        
+            <div class="grid grid-cols-[1fr_auto] items-center gap-x-4">
+              <label>Temperature (°C)</label>
+              <input v-model.number="temperature" type="number" class="input w-[80px] text-slate-800 px-2 py-1 rounded-lg" />
+            </div>
+        
+            <div class="grid grid-cols-[1fr_auto] items-center gap-x-4">
+              <label>Humidity (%)</label>
+              <input v-model.number="humidity" type="number" class="input w-[80px] text-slate-800 px-2 py-1 rounded-lg" />
+            </div>
+        
+            <div class="grid grid-cols-[1fr_auto] items-center gap-x-4">
+              <label>Pressure (hPa)</label>
+              <input v-model.number="pressure" type="number" class="input w-[80px] text-slate-800 px-2 py-1 rounded-lg" />
+            </div>
+        
+            <div class="grid grid-cols-[1fr_auto] items-center gap-x-4">
+              <label>Wind North (m/s)</label>
+              <input v-model.number="wind_north" type="number" class="input w-[80px] text-slate-800 px-2 py-1 rounded-lg" />
+            </div>
+        
+            <div class="grid grid-cols-[1fr_auto] items-center gap-x-4">
+              <label>Wind East (m/s)</label>
+              <input v-model.number="wind_east" type="number" class="input w-[80px] text-slate-800 px-2 py-1 rounded-lg" />
+            </div>
+          </div>
+        
+        </div>
 
-    <h2 class="text-xl font-semibold text-white">PM Prediction</h2>
 
-    <!-- PM type -->
-    <select v-model="pm_type" class="input">
-      <option value="pm2_5">PM2.5</option>
-      <option value="pm10">PM10</option>
-      <option value="pm1">PM1</option>
-    </select>
+        <div class="space-y-6 p-4 bg-slate-900 rounded-xl text-slate-200 text-sm">
+          <!-- ========================= -->
+          <!-- Geolocations -->
+          <!-- ========================= -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-2 text-slate-300 font-medium">
+              <span class="w-1 h-4 bg-purple-500 rounded-full"></span>
+              Geolocations
+            </div>
+        
+            <div class="grid grid-cols-[1fr_auto] items-center gap-x-4">
+              <label>Latitude</label>
+              <input v-model="latitude" type="number" class="input w-[80px] text-slate-800 px-2 py-1 rounded-lg" />
+            </div>
+        
+            <div class="grid grid-cols-[1fr_auto] items-center gap-x-4">
+              <label>Longitude</label>
+              <input v-model="longitude" type="number" class="input w-[80px] text-slate-800 px-2 py-1 rounded-lg" />
+            </div>
+        
+            <div class="grid grid-cols-[1fr_auto] items-center gap-x-4">
+              <label>Altitude</label>
+              <input v-model="altitude" type="number" class="input w-[80px] text-slate-800 px-2 py-1 rounded-lg" />
+            </div>
+        
+            <div class="grid grid-cols-[1fr_auto] items-center gap-x-4">
+              <label>Activity latitude</label>
+              <input v-model="activity_lat" type="number" class="input w-[80px] text-slate-800 px-2 py-1 rounded-lg" />
+            </div>
+        
+            <div class="grid grid-cols-[1fr_auto] items-center gap-x-4">
+              <label>Activity longitude</label>
+              <input v-model="activity_lon" type="number" class="input w-[80px] text-slate-800 px-2 py-1 rounded-lg" />
+            </div>
 
-    <!-- Weather -->
-    <div class="grid grid-cols-2 gap-2">
-      <input v-model.number="temperature" type="number" class="input" placeholder="Temperature (°C)" />
-      <input v-model.number="humidity" type="number" class="input" placeholder="Humidity (%)" />
-      <input v-model.number="pressure" type="number" class="input" placeholder="Pressure (hPa)" />
+            <div class="grid grid-cols-[1fr_auto] items-center gap-x-4">
+              <label>Activity altitude</label>
+              <input v-model="activity_alt" type="number" class="input w-[80px] text-slate-800 px-2 py-1 rounded-lg" />
+            </div>
+          </div>
+        
+          <!-- ========================= -->
+          <!-- Action -->
+          <!-- ========================= -->
+          <button
+            @click="runPrediction"
+            :disabled="loading"
+            class="w-full mt-2 bg-blue-600 hover:bg-blue-700 py-2 rounded-lg text-white font-medium disabled:opacity-60"
+          >
+            {{ loading ? "Predicting..." : "Run Prediction" }}
+          </button>
+        
+          <!-- ========================= -->
+          <!-- Result -->
+          <!-- ========================= -->
+          <div v-if="result" class="mt-3 p-3 bg-slate-800 rounded-lg">
+            <p class="text-xs text-slate-400">PM Type</p>
+            <p class="text-white font-semibold">
+              {{ result.pm_type }} — {{ result.pm_value.toFixed(2) }} {{ result.unit }}
+            </p>
+          </div>
+        
+          <p v-if="error" class="text-red-400 text-sm">{{ error }}</p>
+        </div>
+        
     </div>
 
-    <!-- Wind -->
-    <div class="grid grid-cols-2 gap-2">
-      <input v-model.number="wind_north" type="number" class="input" placeholder="Wind North" />
-      <input v-model.number="wind_east" type="number" class="input" placeholder="Wind East" />
-    </div>
 
-    <!-- Location -->
-    <div class="grid grid-cols-3 gap-2">
-      <input v-model.number="latitude" type="number" class="input" placeholder="Latitude" />
-      <input v-model.number="longitude" type="number" class="input" placeholder="Longitude" />
-      <input v-model.number="altitude" type="number" class="input" placeholder="Altitude (m)" />
-    </div>
-
-    <!-- Activity -->
-    <h3 class="text-sm text-slate-300">Activity source</h3>
-    <div class="grid grid-cols-3 gap-2">
-      <input v-model.number="activity_lat" type="number" class="input" placeholder="Lat" />
-      <input v-model.number="activity_lon" type="number" class="input" placeholder="Lon" />
-      <input v-model.number="activity_alt" type="number" class="input" placeholder="Alt" />
-    </div>
-
-    <!-- Button -->
-    <button
-      @click="runPrediction"
-      :disabled="loading"
-      class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded"
-    >
-      {{ loading ? "Predicting..." : "Run Prediction" }}
-    </button>
-
-    <!-- Result -->
-    <div v-if="result" class="mt-4 p-3 bg-slate-800 rounded">
-      <p class="text-sm text-slate-400">
-        PM Type: {{ result.pm_type }}
-      </p>
-      <p class="text-lg font-semibold text-white">
-        Pedicted value: {{ result.pm_value.toFixed(2) }} {{ result.unit }}
-      </p>
-    </div>
-
-    <!-- Error -->
-    <p v-if="error" class="text-red-400">{{ error }}</p>
-
-  </div>
 </template>
+
+
 
