@@ -7,13 +7,13 @@ const activeTab = ref<"history" | "prediction">("history");
 </script>
 
 <template>
-  <div class="w-full text-slate-200">
+  <div class="w-full text-slate-300">
     <!-- Tabs -->
-    <div class="flex border-b border-slate-700 mb-4">
+    <div class="flex bg-slate-900 rounded-xl mb-4">
       <button
-        class="flex-1 px-4 py-2 text-md font-medium text-center"
+        class="flex-1 py-2 text-md font-medium text-center"
         :class="activeTab === 'history'
-          ? 'border-b-2 border-purple-400 text-purple-400'
+          ? 'text-white bg-slate-800 rounded-xl'
           : 'text-slate-400 hover:text-slate-200'"
         @click="activeTab = 'history'"
       >
@@ -21,9 +21,9 @@ const activeTab = ref<"history" | "prediction">("history");
       </button>
 
       <button
-        class="flex-1 px-4 py-2 text-md font-medium text-center"
+        class="flex-1 py-2 text-md font-medium text-center"
         :class="activeTab === 'prediction'
-          ? 'border-b-2 border-purple-400 text-purple-400'
+          ? 'text-white  bg-slate-800 rounded-xl'
           : 'text-slate-400 hover:text-slate-200'"
         @click="activeTab = 'prediction'"
       >

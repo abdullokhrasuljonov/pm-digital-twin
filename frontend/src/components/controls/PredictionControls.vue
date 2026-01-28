@@ -60,11 +60,11 @@ async function runPrediction() {
 
 <template>
     <div class="space-y-4">
-        <div class="space-y-6 p-4 bg-slate-900 rounded-xl text-slate-200 text-sm">
+        <div class="space-y-4 p-4 bg-slate-900 rounded-xl text-slate-200 text-sm">
           <!-- ========================= -->
           <!-- PM Characteristics -->
           <!-- ========================= -->
-          <div class="space-y-3">
+          <div class="space-y-2">
             <div class="flex items-center gap-2 text-slate-300 font-medium">
               <span class="w-1 h-4 bg-purple-500 rounded-full"></span>
               PM Characteristics
@@ -82,11 +82,11 @@ async function runPrediction() {
           </div>    
         </div>
     
-        <div class="space-y-6 p-4 bg-slate-900 rounded-xl text-slate-200 text-sm">
+        <div class="space-y-4 p-4 bg-slate-900 rounded-xl text-slate-200 text-sm">
           <!-- ========================= -->
           <!-- Environmental Factors -->
           <!-- ========================= -->
-          <div class="space-y-3">
+          <div class="space-y-2">
             <div class="flex items-center gap-2 text-slate-300 font-medium">
               <span class="w-1 h-4 bg-purple-500 rounded-full"></span>
               Environmental Factors
@@ -121,11 +121,11 @@ async function runPrediction() {
         </div>
 
 
-        <div class="space-y-6 p-4 bg-slate-900 rounded-xl text-slate-200 text-sm">
+        <div class="space-y-4 p-4 bg-slate-900 rounded-xl text-slate-200 text-sm">
           <!-- ========================= -->
           <!-- Geolocations -->
           <!-- ========================= -->
-          <div class="space-y-3">
+          <div class="space-y-2">
             <div class="flex items-center gap-2 text-slate-300 font-medium">
               <span class="w-1 h-4 bg-purple-500 rounded-full"></span>
               Geolocations
@@ -170,16 +170,16 @@ async function runPrediction() {
             :disabled="loading"
             class="w-full mt-2 bg-blue-600 hover:bg-blue-700 py-2 rounded-lg text-white font-medium disabled:opacity-60"
           >
-            {{ loading ? "Predicting..." : "Run Prediction" }}
+            {{ loading ? "Predicting..." : "Generate Prediction" }}
           </button>
         
           <!-- ========================= -->
           <!-- Result -->
           <!-- ========================= -->
-          <div v-if="result" class="mt-3 p-3 bg-slate-800 rounded-lg">
-            <p class="text-xs text-slate-400">PM Type</p>
+          <div v-if="result" class="mt-2 p-3 bg-slate-800 rounded-lg">
+            <p class="text-md text-slate-400">PM Prediction Result</p>
             <p class="text-white font-semibold">
-              {{ result.pm_type }} — {{ result.pm_value.toFixed(2) }} {{ result.unit }}
+              {{ result.pm_type }} : {{ result.pm_value.toFixed(2) }} {{ result.unit }}
             </p>
           </div>
         

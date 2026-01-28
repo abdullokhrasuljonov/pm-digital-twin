@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 
 export const useEnvStore = defineStore("env", {
   state: () => ({
+    pmType: "pm2_5" as "pm1" | "pm2_5" | "pm10",
     timeRange: {
       start: "2026-10-01T14:00",
       end: "2026-10-01T16:00",
