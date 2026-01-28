@@ -143,6 +143,13 @@ onMounted(async () => {
 
   // Load site model
   await SceneLoader.AppendAsync("/models/", "site.glb", scene);
+  scene.meshes.forEach((m) => {
+   if (m.name !== "__root__") {
+    m.position.y -= 180;
+    m.position.x -= 480
+    m.position.z -= 100
+   }
+  });
   camera.zoomOn(scene.meshes);
 
   // Initial PM render
